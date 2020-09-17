@@ -1,42 +1,8 @@
-input
-5
-30
-6
-45
-add
-input
-5
-60
-20
-3
-sub
-input
-7
-43
-121
-90
-mult
-input
-78
-20
-1
-15
-div
-input
-56
-23
-76
-56
-comp
-input
-323
-12
-412321
-15
-eq
-input
-12
-5
-0
-0
-conj
+5 30 6 45 add
+5 60 20 3 sub
+7 43 121 90 mult
+78 20 1 15 div
+56 23 76 56 comp
+323 12 412321 15 eq
+12 5 0 0 conj
+exit

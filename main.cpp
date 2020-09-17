@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
+#include <sstream>
+#include <string>
 
 const double MAX_ANGLE = 2 * M_PI;
 
@@ -104,55 +107,78 @@ double from_degrees_to_rad(double deg){
 void help(){
     std::cout << "write exit for exit" << std::endl;
     std::cout << "write help for help" << std::endl;
-    std::cout << "write input for input two variables (j in degrees) and action, format \nr1\nj1\nr2\nj2\naction" << std::endl;
+    std::cout << "input format r1 j1 r2 j2 action" << std::endl;
     std::cout << "in input mode add - addition, sub - subtraction, mult - multiplication, "
                  "div - division, comp - compare, eq for equal, conj for first number conjugate " << std::endl;
 }
 
+template <typename Out>
+void split(const std::string &s, char delim, Out result) {
+    std::istringstream iss(s);
+    std::string item;
+    while (std::getline(iss, item, delim)) {
+        *result++ = item;
+    }
+}
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
+
 int main() {
     std::string cmd;
+    std::vector<std::string> out;
+    std::stringstream buffer;
+    int count = 0;
     help();
     while (true){
-        std::cin >> cmd;
+        getline(std::cin, cmd);
         if (cmd == "exit"){
             break;
         }
         else if (cmd == "help"){
             help();
         }
-        else if (cmd == "input"){
+        else {
+            count++;
             double r1,j1,r2,j2;
             std::string action;
-            std::cin >> r1;
-            std::cin >> j1;
-            std::cin >> r2;
-            std::cin >> j2;
-            std::cin >> action;
+            std::vector<std::string> x = split(cmd, ' ');
+
+            r1 = stod(x[0]);
+            j1 = stod(x[1]);
+            r2 = stod(x[2]);
+            j2 = stod(x[3]);
+            action = x[4];
+
             Complex a = {r1,from_degrees_to_rad(j1)};
             Complex b = {r2,from_degrees_to_rad(j2)};
 
             if (action == "add"){
-                std::cout << a + b << std::endl;
+                buffer << "out " << count << ": " << a + b << std::endl;
             }
             else if (action == "sub"){
-                std::cout << a - b << std::endl;
+                buffer << "out " << count << ": " << a - b << std::endl;
             }
             else if (action == "mult"){
-                std::cout << a * b << std::endl;
+                buffer << "out " << count << ": " << a * b << std::endl;
             }
             else if (action == "div"){
-                std::cout << a / b << std::endl;
+                buffer << "out " << count << ": " << a / b << std::endl;
             }
             else if (action == "comp"){
-                std::cout << (a > b) << std::endl;
+                buffer << "out " << count << ": " << (a > b) << std::endl;
             }
             else if (action == "eq"){
-                std::cout << (a == b) << std::endl;
+                buffer << "out " << count << ": " << (a == b) << std::endl;
             }
             else if (action == "conj"){
-                std::cout << a.conj() << std::endl;
+                buffer << "out " << count << ": " << a.conj() << std::endl;
             }
         }
     }
+    std::cout << buffer.str() << std::endl;
     return 0;
 }
